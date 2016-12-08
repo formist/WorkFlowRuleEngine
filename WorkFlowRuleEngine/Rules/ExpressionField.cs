@@ -52,7 +52,7 @@ namespace WorkFlowRuleEngine.Rules
                 expProperty = expProperty.NextExpressionProperty;
                 
             }
-            expProperty.PropertyInfo.SetValue(input, value);
+            expProperty.PropertyInfo.SetValue(input, value, null);
         }
 
         public ParameterExpression ParameterExpression
