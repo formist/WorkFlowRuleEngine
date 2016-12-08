@@ -7,15 +7,16 @@ namespace WorkFlowRuleEngine.Rules
 {
     public class PredicateRule<T>
     {
-        protected Predicate<T> predicate = null;
-        protected Rule<T> ruleCondition = null;
+        protected internal Predicate<T> predicate = null;
+        protected internal Rule<T> ruleCondition = null;
 
-        protected Action<T> inCaseOfTrue = null;
-        protected Rule<T> ruleInCaseOfTrue = null;
+        protected internal Action<T> inCaseOfTrue = null;
+        protected internal Rule<T> ruleInCaseOfTrue = null;
 
-        protected Action<T> inCaseOfFalse = null;
-        protected Rule<T> ruleInCaseOfFalse = null;
+        protected internal Action<T> inCaseOfFalse = null;
+        protected internal Rule<T> ruleInCaseOfFalse = null;
 
+        protected PredicateRule<T> ruleChild = null;
 
         #region Condition
         public PredicateRule<T> Condition(Predicate<T> predicate)
@@ -43,6 +44,7 @@ namespace WorkFlowRuleEngine.Rules
         #endregion
 
         #region When False
+        
         public PredicateRule<T> WhenFalse(Action<T> inCaseOfFalse)
         {
             ruleInCaseOfFalse = null;
@@ -58,6 +60,12 @@ namespace WorkFlowRuleEngine.Rules
             ruleInCaseOfFalse = new Rule<T>();
             ruleInCaseOfFalse.Expression(inCaseOfFalse);
 
+            return this;
+        }
+
+        public PredicateRule<T> WhenFalse(PredicateRule<T> inCaseOfFalse)
+        {
+            this.ruleChild = inCaseOfFalse;
             return this;
         }
         #endregion
@@ -78,6 +86,11 @@ namespace WorkFlowRuleEngine.Rules
             ruleInCaseOfTrue = new Rule<T>();
             ruleInCaseOfTrue.Expression(inCaseOfTrue);
 
+            return this;
+        }
+        public PredicateRule<T> WhenTrue(PredicateRule<T> inCaseOfTrue)
+        {
+            this.ruleChild = inCaseOfTrue;
             return this;
         }
         #endregion

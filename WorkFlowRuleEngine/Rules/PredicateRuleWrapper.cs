@@ -40,9 +40,44 @@ namespace WorkFlowRuleEngine.Rules
 
             return result;
         }
+        private bool EvaluateCondition(T input, PredicateRule<T> pred)
+        {
+            if (pred == null)
+                throw new Exception("PredicateRule is null");
+            if (pred.predicate == null && pred.ruleCondition == null)
+                throw new Exception("PredicateRule is Empty");
+            bool result = false;
 
+            if (pred.predicate != null)
+            {
+                result = pred.predicate(input);
+            }
+            else
+            {
+                object rez = pred.ruleCondition.Evaluate(input);
+                result = bool.Parse(rez.ToString());
+            }
+
+
+            return result;
+        }
         private object EvaluateInCaseOfTrue(T input)
         {
+            System.Diagnostics.Debug.WriteLine("True");
+            if (ruleChild != null)
+            {
+                bool result = EvaluateCondition(input, ruleChild);
+                if (result)
+                {
+                    inCaseOfTrue = ruleChild.inCaseOfTrue;
+                    ruleInCaseOfTrue = ruleChild.ruleInCaseOfTrue;
+                }
+                else
+                {
+                    inCaseOfTrue = ruleChild.inCaseOfFalse;
+                    ruleInCaseOfTrue = ruleChild.ruleInCaseOfFalse;
+                }
+            }
             if (inCaseOfTrue == null && ruleInCaseOfTrue == null)
                 throw new Exception("Please set the method in case of the method is evaluated to True");
 
@@ -61,6 +96,21 @@ namespace WorkFlowRuleEngine.Rules
 
         private object EvaluateInCaseOfFalse(T input)
         {
+            System.Diagnostics.Debug.WriteLine("False");
+            if (ruleChild != null)
+            {
+                bool result = EvaluateCondition(input, ruleChild);
+                if (result)
+                {
+                    inCaseOfFalse = ruleChild.inCaseOfTrue;
+                    ruleInCaseOfFalse = ruleChild.ruleInCaseOfTrue;
+                }
+                else
+                {
+                    inCaseOfFalse = ruleChild.inCaseOfFalse;
+                    ruleInCaseOfFalse = ruleChild.ruleInCaseOfFalse;
+                }
+            }
             if (inCaseOfFalse == null && ruleInCaseOfFalse == null)
                 throw new Exception("Please set the method in case of the method is evaluated to True");
 

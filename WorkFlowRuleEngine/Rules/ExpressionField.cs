@@ -48,11 +48,18 @@ namespace WorkFlowRuleEngine.Rules
             while (expProperty.NextExpressionProperty != null)
             {
                 input = expProperty.PropertyInfo.GetValue(input, null);
-
                 expProperty = expProperty.NextExpressionProperty;
-                
+
             }
+            var type = expProperty.PropertyInfo.PropertyType;
+            value = Convert.ChangeType(value, type);
             expProperty.PropertyInfo.SetValue(input, value, null);
+            //try
+            //{
+                
+            //}
+            //catch (Exception ex)
+            //{ System.Diagnostics.Debug.WriteLine(ex.Message); }
         }
 
         public ParameterExpression ParameterExpression

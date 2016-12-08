@@ -88,15 +88,15 @@ namespace WorkFlowRuleEngine.Rules
             return this;
         }
 
-
         #region Parse Expression
         private void ParseExpression(string expression)
         {
             expression = expression.Trim();
             string tempExpression = expression.Replace("==", "..");
+            tempExpression = tempExpression.Replace(">=", "..");
+            tempExpression = tempExpression.Replace("<=", "..");
+            tempExpression = tempExpression.Replace("!=", "..");
             int assertionIndex = tempExpression.IndexOf("=");
-
-
 
             if (string.IsNullOrEmpty(expression))
                 throw new Exception("Please provide a rule expression");
